@@ -72,10 +72,3 @@ const getCommandsFromCMS = async () => {
 };
 
 module.exports = getCommandsFromCMS;
-
-// function init() {
-//   console.log("cms token:", process.env.CMS_API_TOKEN);
-//   getCommandsFromCMS();
-// }
-
-// init();
