@@ -11,7 +11,7 @@ module.exports = {
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
   scopes: ["bot"],
-  redirectUri: "https://fac5db25.ngrok.io/install/auth"
+  redirectUri: "https://guarded-mesa-68602.herokuapp.com/install/auth"
   // functions required for retrieving team-specific info
   // for use in multi-team apps
   // getTokenForTeam: getTokenForTeam,
