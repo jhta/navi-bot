@@ -1,16 +1,16 @@
 const get = require("lodash/get");
 
-const cmsMessagesMatcher = async (message, commands = {}) => {
+const createCmsMessagesMatcher = (commands = {}) => message => {
   const msg = get(message, "text", "").toLowerCase();
   return Boolean(commands[msg]);
 };
 
 module.exports = (controller, options) => {
   const { commands } = options;
+  const cmsMessagesMatcher = createCmsMessagesMatcher(commands);
 
   controller.hears(
-    // cmsMessagesMatcher,
-    "testing_cms",
+    cmsMessagesMatcher,
     "direct_message",
     async (bot, message) => {
       if (!Object.values(commands)) {
@@ -19,8 +19,8 @@ module.exports = (controller, options) => {
       }
 
       const msg = get(message, "text", "").toLowerCase();
-      // const response = commands[msg] ? commands[msg] : "Sorry, I don't get it.";
-      await bot.reply(message, msg);
+      const response = commands[msg] ? commands[msg] : "Sorry, I don't get it.";
+      await bot.reply(message, response);
     }
   );
 };
