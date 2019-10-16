@@ -40,6 +40,7 @@ const controller = new Botkit({
 controller.ready(async () => {
   // load traditional developer-created local custom feature modules
   // controller.loadModules(__dirname + "/features");
+  console.log("hey!");
 
   const commands = await fetchCommandsFromCms();
   help(controller, { commands });

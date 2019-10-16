@@ -7,8 +7,8 @@
     "start": "node bot.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "engines" : {
-    "node" : ">=12.10.0"
+  "engines": {
+    "node": ">=12.10.0"
   },
   "dependencies": {
     "apollo-boost": "^0.4.4",
