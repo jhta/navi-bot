@@ -2,22 +2,15 @@
 // |__) /  \  |  |__/ |  |
 // |__) \__/  |  |  \ |  |
 
-// This is the main file for the bootone bot.
+// This is the main file for the bot.
 
 require("dotenv").config();
 
 // Import Botkit's core features
 const { Botkit } = require("botkit");
-const { BotkitCMSHelper } = require("botkit-plugin-cms");
-const get = require("lodash/get");
-
-const {
-  SlackAdapter,
-  SlackMessageTypeMiddleware,
-  SlackEventMiddleware
-} = require("botbuilder-adapter-slack");
 
 const fetchCommandsFromCms = require("./cms");
+const createSlackAdapter = require("./slack-adapter");
 const config = require("./config");
 
 // Skills
@@ -25,11 +18,7 @@ const help = require("./skills/help");
 const hello = require("./skills/hello");
 const cms = require("./skills/cms");
 
-const adapter = new SlackAdapter(config);
-// Use SlackEventMiddleware to emit events that match their original Slack event types.
-adapter.use(new SlackEventMiddleware());
-// Use SlackMessageType middleware to further classify messages as direct_message, direct_mention, or mention
-adapter.use(new SlackMessageTypeMiddleware());
+const adapter = createSlackAdapter(config);
 
 const controller = new Botkit({
   webhook_uri: "/slack/receive",
@@ -52,18 +41,12 @@ controller.webserver.get("/", (req, res) => {
 });
 
 controller.webserver.get("/install", (req, res) => {
-  // getInstallLink points to slack's oauth endpoint and includes clientId and scopes
   res.redirect(controller.adapter.getInstallLink());
 });
 
 controller.webserver.get("/install/auth", async (req, res) => {
   try {
     const results = await controller.adapter.validateOauthCode(req.query.code);
-    console.log("FULL OAUTH DETAILS", results);
-    // Store token by team in bot state.
-    // tokenCache[results.team_id] = results.bot.bot_access_token;
-    // Capture team to bot id
-    // userCache[results.team_id] = results.bot.bot_user_id;
     res.json("Success! Bot installed.");
   } catch (err) {
     console.error("OAUTH ERROR:", err);
