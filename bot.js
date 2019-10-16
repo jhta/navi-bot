@@ -23,6 +23,7 @@ const config = require("./config");
 // Skills
 const help = require("./skills/help");
 const hello = require("./skills/hello");
+const cms = require("./skills/cms");
 
 const adapter = new SlackAdapter(config);
 // Use SlackEventMiddleware to emit events that match their original Slack event types.
@@ -40,26 +41,10 @@ const controller = new Botkit({
 controller.ready(async () => {
   // load traditional developer-created local custom feature modules
   // controller.loadModules(__dirname + "/features");
-  console.log("hey!");
-
   const commands = await fetchCommandsFromCms();
   help(controller, { commands });
   hello(controller);
-
-  const cmsMessagesMatcher = async message => {
-    const msg = get(message, "text", "").toLowerCase();
-    return Boolean(commands[msg]);
-  };
-
-  controller.hears(
-    cmsMessagesMatcher,
-    "direct_message",
-    async (bot, message) => {
-      const msg = get(message, "text", "").toLowerCase();
-      const response = commands[msg] ? commands[msg] : "Sorry, I don't get it.";
-      await bot.reply(message, response);
-    }
-  );
+  cms(controller, { commands });
 });
 
 controller.webserver.get("/", (req, res) => {
