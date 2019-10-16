@@ -8,6 +8,6 @@ const ifSayHello = async message =>
 module.exports = controller => {
   controller.hears(ifSayHello, "direct_message", async (bot, message) => {
     const user = `<@${message.user}>`;
-    await bot.reply(message, `Hello ${message.user}`);
+    await bot.reply(message, `Hello ${user}`);
   });
 };
