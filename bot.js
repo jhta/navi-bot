@@ -43,6 +43,10 @@ controller.hears("update_cms", "direct_message", async (bot, message) => {
   }
 });
 
+controller.hears("debug", "direct_message", async (bot, message) => {
+  bot.reply(message, JSON.stringify(commands));
+});
+
 controller.webserver.get("/", (req, res) => {
   res.send(`This app is running Botkit ${controller.version}.`);
 });

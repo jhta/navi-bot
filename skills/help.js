@@ -8,10 +8,6 @@ module.exports = (controller, options) => {
   const { commands } = options;
   const friendlyCommands = getFriendlyCommands(commands);
 
-  console.log("***********************");
-  console.log("friendly commands:", friendlyCommands);
-  console.log("***********************");
-
   controller.hears(
     ["list", "commands", "help"],
     "message,direct_message",
