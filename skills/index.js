@@ -1,11 +1,11 @@
-const Hello = require("./hello");
-const Help = require("./help");
-const Cms = require("./cms");
+const hello = require("./hello");
+const help = require("./help");
+const cms = require("./cms");
 
 const Skills = {
-  Hello,
-  Help,
-  Cms
+  hello: hello,
+  help: help,
+  cms: cms
 };
 
 module.exports = Skills;
