@@ -9,8 +9,8 @@ module.exports = (controller, options) => {
   const { commands } = options;
 
   controller.hears(
-    cmsMessagesMatcher,
-    // 'testing_cms',
+    // cmsMessagesMatcher,
+    "testing_cms",
     "direct_message",
     async (bot, message) => {
       if (!Object.values(commands)) {
