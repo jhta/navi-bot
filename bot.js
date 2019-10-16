@@ -7,6 +7,7 @@ const createSlackAdapter = require("./slack-adapter");
 const config = require("./config");
 
 const Skills = require("./skills");
+const cms = require("./skills/cms");
 
 // const loadRoutes = require("./routes");
 
@@ -31,7 +32,7 @@ controller.ready(async () => {
 
   Skills.help(controller, { commands });
   Skills.hello(controller);
-  Skills.cms(controller, { commands });
+  cms(controller, { commands });
 });
 
 controller.hears("update_cms", "direct_message", async (bot, message) => {
