@@ -12,6 +12,11 @@ module.exports = (controller, options) => {
     cmsMessagesMatcher,
     "direct_message",
     async (bot, message) => {
+      if (!Object.values(commands)) {
+        await bot.reply(message, "there is not commands available");
+        return null;
+      }
+
       const msg = get(message, "text", "").toLowerCase();
       const response = commands[msg] ? commands[msg] : "Sorry, I don't get it.";
       await bot.reply(message, response);
