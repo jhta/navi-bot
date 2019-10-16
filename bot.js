@@ -17,13 +17,24 @@ const controller = new Botkit({
   debug: process.env.NODE_ENV !== "production"
 });
 
+let commands = {};
+
 controller.ready(async () => {
   // load routes
   controller.loadModules(__dirname + "/routes");
 
-  const commands = await fetchCommandsFromCms();
+  commands = await fetchCommandsFromCms();
 
   Skills.Help(controller, { commands });
   Skills.hello(controller);
   Skills.Cms(controller, { commands });
+});
+
+controller.hears("update_cms", "direct_message", async (bot, message) => {
+  try {
+    commands = await fetchCommandsFromCms();
+    bot.reply(message, "commnads updated");
+  } catch (error) {
+    bot.reply(message, `error reloading: ${error.message}`);
+  }
 });
