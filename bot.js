@@ -8,6 +8,8 @@ const config = require("./config");
 
 const Skills = require("./skills");
 
+const loadRoutes = require("./routes");
+
 const adapter = createSlackAdapter(config);
 
 const controller = new Botkit({
@@ -19,9 +21,11 @@ const controller = new Botkit({
 
 let commands = {};
 
+loadRoutes(controller);
+
 controller.ready(async () => {
   // load routes
-  controller.loadModules(__dirname + "/routes");
+  // controller.loadModules(__dirname + "/routes");
 
   commands = await fetchCommandsFromCms();
 
