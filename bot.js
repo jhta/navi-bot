@@ -29,9 +29,9 @@ controller.ready(async () => {
 
   commands = await fetchCommandsFromCms();
 
-  Skills.Help(controller, { commands });
+  Skills.help(controller, { commands });
   Skills.hello(controller);
-  Skills.Cms(controller, { commands });
+  Skills.cms(controller, { commands });
 });
 
 controller.hears("update_cms", "direct_message", async (bot, message) => {
