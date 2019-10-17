@@ -5,7 +5,8 @@ const getFriendlyCommands = commands =>
     .join(`\n`);
 
 module.exports = (controller, options) => {
-  const { commands } = options;
+  const { storage } = options;
+  const commands = storage.getCommands();
   const friendlyCommands = getFriendlyCommands(commands);
 
   controller.hears(

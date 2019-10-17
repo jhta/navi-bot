@@ -9,6 +9,8 @@ const config = require("./config");
 const Skills = require("./skills");
 const cms = require("./skills/cms");
 
+const Storage = require("./storage");
+
 // const loadRoutes = require("./routes");
 
 const adapter = createSlackAdapter(config);
@@ -20,7 +22,7 @@ const controller = new Botkit({
   debug: process.env.NODE_ENV !== "production"
 });
 
-let commands = {};
+let storage = new Storage();
 
 // loadRoutes(controller);
 
@@ -28,17 +30,34 @@ controller.ready(async () => {
   // load routes
   // controller.loadModules(__dirname + "/routes");
 
-  commands = await fetchCommandsFromCms();
+  const commands = await fetchCommandsFromCms();
+  storage.setCommands(commands);
 
-  Skills.help(controller, { commands });
+  Skills.help(controller, { storage });
   Skills.hello(controller);
-  cms(controller, { commands });
+  cms(controller, { storage });
 });
+
+function findDiff(str1, str2) {
+  const s1 = JSON.stringify(str1);
+  const s2 = JSON.stringify(str2);
+  let diff = "";
+  s2.split("").forEach((val, i) => {
+    if (val != s1.charAt(i)) diff += val;
+  });
+  return diff;
+}
 
 controller.hears("update_cms", "direct_message", async (bot, message) => {
   try {
-    commands = await fetchCommandsFromCms();
-    bot.reply(message, "commnads updated");
+    const oldCommands = storage.getCommands();
+    const commands = await fetchCommandsFromCms();
+    const diff = findDiff(oldCommands, commands);
+    storage.setCommands(commands);
+
+    bot.reply(message, "commnads updated. Check:");
+    bot.reply(message, `${JSON.stringify(storage.getCommands())}`);
+    bot.reply(message, `diff: ${diff}`);
   } catch (error) {
     bot.reply(message, `error reloading: ${error.message}`);
   }

@@ -6,7 +6,8 @@ const createCmsMessagesMatcher = (commands = {}) => message => {
 };
 
 module.exports = (controller, options) => {
-  const { commands } = options;
+  const { storage } = options;
+  const commands = storage.getCommands();
   const cmsMessagesMatcher = createCmsMessagesMatcher(commands);
 
   controller.hears(
