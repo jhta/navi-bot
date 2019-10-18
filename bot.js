@@ -51,20 +51,20 @@ function findDiff(str1, str2) {
 controller.hears("update_cms", "direct_message", async (bot, message) => {
   try {
     const oldCommands = storage.getCommands();
-    const commands = await fetchCommandsFromCms();
-    const diff = findDiff(oldCommands, commands);
-    storage.setCommands(commands);
+    const newCommands = await fetchCommandsFromCms();
+    const diff = findDiff(oldCommands, newCommands);
+    storage.setCommands(newCommands);
 
-    bot.reply(message, "commnads updated. Check:");
-    bot.reply(message, `${JSON.stringify(storage.getCommands())}`);
-    bot.reply(message, `diff: ${diff}`);
+    await bot.reply(message, "commnads updated. Check:");
+    await bot.reply(message, `${JSON.stringify(storage.getCommands())}`);
+    await bot.reply(message, `diff: ${newCommands}`);
   } catch (error) {
     bot.reply(message, `error reloading: ${error.message}`);
   }
 });
 
 controller.hears("debug", "direct_message", async (bot, message) => {
-  bot.reply(message, JSON.stringify(commands));
+  bot.reply(message, JSON.stringify(storage.getCommands()));
 });
 
 controller.webserver.get("/", (req, res) => {
