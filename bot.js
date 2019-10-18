@@ -57,7 +57,7 @@ controller.hears("update_cms", "direct_message", async (bot, message) => {
 
     await bot.reply(message, "commnads updated. Check:");
     await bot.reply(message, `${JSON.stringify(storage.getCommands())}`);
-    await bot.reply(message, `diff: ${Json.stringify(newCommands)}`);
+    await bot.reply(message, `diff: ${JSON.stringify(newCommands)}`);
   } catch (error) {
     bot.reply(message, `error reloading: ${error.message}`);
   }
