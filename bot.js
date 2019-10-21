@@ -91,4 +91,5 @@ controller.webserver.get("/install/auth", async (req, res) => {
 controller.webserver.post("/update_cms", async (req, res) => {
   const newCommands = await fetchCommandsFromCms();
   await storage.setCommands(newCommands);
+  res.json("storage updated :) ");
 });
