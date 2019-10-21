@@ -87,3 +87,8 @@ controller.webserver.get("/install/auth", async (req, res) => {
     res.send(err.message);
   }
 });
+
+controller.webserver.post("/update_cms", async (req, res) => {
+  const newCommands = await fetchCommandsFromCms();
+  await storage.setCommands(newCommands);
+});
