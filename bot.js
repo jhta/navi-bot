@@ -50,14 +50,15 @@ function findDiff(str1, str2) {
 
 controller.hears("update_cms", "direct_message", async (bot, message) => {
   try {
-    const oldCommands = storage.getCommands();
+    const oldCommands = await storage.getCommands();
     const newCommands = await fetchCommandsFromCms();
     const diff = findDiff(oldCommands, newCommands);
-    storage.setCommands(newCommands);
+    await storage.setCommands(newCommands);
 
+    const testCommands = await storage.getCommands();
     await bot.reply(message, "commnads updated. Check:");
-    await bot.reply(message, `${JSON.stringify(storage.getCommands())}`);
-    await bot.reply(message, `diff: ${JSON.stringify(newCommands)}`);
+    await bot.reply(message, `${JSON.stringify(testCommands)}`);
+    await bot.reply(message, `diff: ${JSON.stringify(diff)}`);
   } catch (error) {
     bot.reply(message, `error reloading: ${error.message}`);
   }
@@ -77,7 +78,7 @@ controller.webserver.get("/install", (req, res) => {
 
 controller.webserver.get("/install/auth", async (req, res) => {
   try {
-    const results = await controller.adapter.validateOauthCode(req.query.code);
+    await controller.adapter.validateOauthCode(req.query.code);
     res.json("Success! Bot installed.");
   } catch (err) {
     console.error("OAUTH ERROR:", err);

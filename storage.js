@@ -1,25 +1,28 @@
 const fs = require("fs");
+const { promisify } = require("util");
 
-const readData = () =>
-  fs.readFile(".data.json", (err, data) => {
-    if (err) throw err;
-    return JSON.parse(data);
-  });
+const readFileAsync = promisify(fs.readFile);
+const writeFileAsync = promisify(fs.writeFile);
 
-const writeData = commands => {
+const readData = async () => {
+  const res = await readFileAsync(".data.json");
+  return JSON.parse(res);
+};
+
+const writeData = async commands => {
   let data = JSON.stringify(commands);
-  fs.writeFileSync(".data.json", data);
+  await writeFileAsync(".data.json", data);
   return "done";
 };
 
 function Storage(initial = {}) {
   this.commands = initial;
   writeData(initial);
-  this.setCommands = commands => {
+  this.setCommands = async commands => {
     this.commands = commands;
-    writeData(commands);
+    await writeData(commands);
   };
-  this.getCommands = readData;
+  this.getCommands = async () => await readData();
 }
 
 module.exports = Storage;
