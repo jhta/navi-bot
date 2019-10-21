@@ -4,9 +4,9 @@ const getFriendlyCommands = commands =>
     .map(c => `* ${c}`)
     .join(`\n`);
 
-module.exports = (controller, options) => {
+module.exports = async (controller, options) => {
   const { storage } = options;
-  const commands = storage.getCommands();
+  const commands = await storage.getCommands();
   const friendlyCommands = getFriendlyCommands(commands);
 
   controller.hears(

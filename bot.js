@@ -33,9 +33,9 @@ controller.ready(async () => {
   const commands = await fetchCommandsFromCms();
   storage.setCommands(commands);
 
-  Skills.help(controller, { storage });
+  await Skills.help(controller, { storage });
   Skills.hello(controller);
-  cms(controller, { storage });
+  await cms(controller, { storage });
 });
 
 function findDiff(str1, str2) {
@@ -65,7 +65,8 @@ controller.hears("update_cms", "direct_message", async (bot, message) => {
 });
 
 controller.hears("debug", "direct_message", async (bot, message) => {
-  bot.reply(message, JSON.stringify(storage.getCommands()));
+  const commands = await storage.getCommands();
+  bot.reply(message, JSON.stringify(commands));
 });
 
 controller.webserver.get("/", (req, res) => {

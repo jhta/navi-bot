@@ -5,9 +5,9 @@ const createCmsMessagesMatcher = (commands = {}) => message => {
   return Boolean(commands[msg]);
 };
 
-module.exports = (controller, options) => {
+module.exports = async (controller, options) => {
   const { storage } = options;
-  const commands = storage.getCommands();
+  const commands = await storage.getCommands();
   const cmsMessagesMatcher = createCmsMessagesMatcher(commands);
 
   controller.hears(
