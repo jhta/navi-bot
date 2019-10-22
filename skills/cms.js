@@ -6,7 +6,7 @@ const createCmsMessagesMatcher = async ( storage = {}) => message => {
   return Boolean(commands[msg]);
 };
 
-module.exports = async (controller, options) => {
+module.exports = (controller, options) => {
   const { storage } = options;
 
   controller.hears(

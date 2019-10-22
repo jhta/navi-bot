@@ -4,7 +4,7 @@ const getFriendlyCommands = commands =>
     .map(c => `* ${c}`)
     .join(`\n`);
 
-module.exports = async (controller, options) => {
+module.exports = (controller, options) => {
   controller.hears(
     ["list", "commands", "help"],
     "message,direct_message",

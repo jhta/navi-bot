@@ -42,17 +42,14 @@ controller.ready(async () => {
   // const initCommands = await fetchCommandsFromCms();
   storage = await createStorage();
 
-  await Skills.help(controller, { storage });
   Skills.hello(controller);
-  // await cms(controller, { storage });
+  // Skills.help(controller, { storage });
+  // cms(controller, { storage });
 });
 
 controller.hears("update_cms", "direct_message", async (bot, message) => {
   try {
-    // const oldCommands = await storage.getCommands();
-    // const newCommands = await fetchCommandsFromCms();
-    // const diff = findDiff(oldCommands, newCommands);
-    await storage.setCommands(newCommands);
+    await storage.setCommands();
 
     const testCommands = await storage.getCommands();
     await bot.reply(message, "commnads updated. Check:");
@@ -89,7 +86,6 @@ controller.webserver.get("/install/auth", async (req, res) => {
 });
 
 controller.webserver.post("/update_cms", async (req, res) => {
-  const newCommands = await fetchCommandsFromCms();
-  await storage.setCommands(newCommands);
+  await storage.setCommands();
   res.json("storage updated :) ");
 });
