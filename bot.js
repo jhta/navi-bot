@@ -37,24 +37,23 @@ controller.ready(async () => {
   cms(controller, { storage });
 });
 
-// controller.hears("update_cms", "direct_message", async (bot, message) => {
-//   try {
-//     await storage.setCommands();
+controller.hears("update_cms", "direct_message", async (bot, message) => {
+  try {
+    await storage.setCommands();
 
-//     const testCommands = await storage.getCommands();
-//     await bot.reply(message, "commnads updated. Check:");
-//     await bot.reply(message, `${JSON.stringify(testCommands)}`);
-//     // await bot.reply(message, `diff: ${JSON.stringify(diff)}`);
-//   } catch (error) {
-//     bot.reply(message, `error reloading: ${error.message}`);
-//   }
-// });
+    const testCommands = await storage.getCommands();
+    await bot.reply(message, "commnads updated. Check:");
+    await bot.reply(message, `${JSON.stringify(testCommands)}`);
+  } catch (error) {
+    bot.reply(message, `error reloading: ${error.message}`);
+  }
+});
 
-// controller.hears("debug", "direct_message", async (bot, message) => {
-//   await storage.setCommands();
-//   const commands = await storage.getCommands();
-//   bot.reply(message, JSON.stringify(commands));
-// });
+controller.hears("debug", "direct_message", async (bot, message) => {
+  await storage.setCommands();
+  const commands = await storage.getCommands();
+  bot.reply(message, JSON.stringify(commands));
+});
 
 controller.webserver.get("/", async (req, res) => {
   await storage.setCommands();
@@ -83,6 +82,6 @@ controller.webserver.get("/install/auth", async (req, res) => {
 });
 
 controller.webserver.post("/update_cms", async (req, res) => {
-  // await storage.setCommands();
+  await storage.setCommands();
   res.json("storage updated :) ");
 });
