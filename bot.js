@@ -9,7 +9,7 @@ const config = require("./config");
 const Skills = require("./skills");
 const cms = require("./skills/cms");
 
-const createStorage = require("./storage");
+// const createStorage = require("./storage");
 // const loadRoutes = require("./routes");
 
 const adapter = createSlackAdapter(config);
@@ -23,16 +23,6 @@ const controller = new Botkit({
 
 // loadRoutes(controller);
 
-function findDiff(str1, str2) {
-  const s1 = JSON.stringify(str1);
-  const s2 = JSON.stringify(str2);
-  let diff = "";
-  s2.split("").forEach((val, i) => {
-    if (val != s1.charAt(i)) diff += val;
-  });
-  return diff;
-}
-
 let storage = null;
 
 controller.ready(async () => {
@@ -40,31 +30,31 @@ controller.ready(async () => {
   // controller.loadModules(__dirname + "/routes");
 
   // const initCommands = await fetchCommandsFromCms();
-  storage = await createStorage();
+  // storage = await createStorage();
 
   Skills.hello(controller);
   // Skills.help(controller, { storage });
   // cms(controller, { storage });
 });
 
-controller.hears("update_cms", "direct_message", async (bot, message) => {
-  try {
-    await storage.setCommands();
+// controller.hears("update_cms", "direct_message", async (bot, message) => {
+//   try {
+//     await storage.setCommands();
 
-    const testCommands = await storage.getCommands();
-    await bot.reply(message, "commnads updated. Check:");
-    await bot.reply(message, `${JSON.stringify(testCommands)}`);
-    // await bot.reply(message, `diff: ${JSON.stringify(diff)}`);
-  } catch (error) {
-    bot.reply(message, `error reloading: ${error.message}`);
-  }
-});
+//     const testCommands = await storage.getCommands();
+//     await bot.reply(message, "commnads updated. Check:");
+//     await bot.reply(message, `${JSON.stringify(testCommands)}`);
+//     // await bot.reply(message, `diff: ${JSON.stringify(diff)}`);
+//   } catch (error) {
+//     bot.reply(message, `error reloading: ${error.message}`);
+//   }
+// });
 
-controller.hears("debug", "direct_message", async (bot, message) => {
-  await storage.setCommands();
-  const commands = await storage.getCommands();
-  bot.reply(message, JSON.stringify(commands));
-});
+// controller.hears("debug", "direct_message", async (bot, message) => {
+//   await storage.setCommands();
+//   const commands = await storage.getCommands();
+//   bot.reply(message, JSON.stringify(commands));
+// });
 
 controller.webserver.get("/", (req, res) => {
   res.send(`This app is running Botkit ${controller.version}.`);
@@ -86,6 +76,6 @@ controller.webserver.get("/install/auth", async (req, res) => {
 });
 
 controller.webserver.post("/update_cms", async (req, res) => {
-  await storage.setCommands();
+  // await storage.setCommands();
   res.json("storage updated :) ");
 });
