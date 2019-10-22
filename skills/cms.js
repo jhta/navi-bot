@@ -1,16 +1,10 @@
 const get = require("lodash/get");
 
-const createCmsMessagesMatcher = async ( storage = {}) => message => {
-  const commands = await storage.getCommands();
-  const msg = get(message, "text", "").toLowerCase();
-  return Boolean(commands[msg]);
-};
-
 module.exports = (controller, options) => {
   const { storage } = options;
 
   controller.hears(
-    async (message) => {
+    async message => {
       const commands = await storage.getCommands();
       const msg = get(message, "text", "").toLowerCase();
       return Boolean(commands[msg]);

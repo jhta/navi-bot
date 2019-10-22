@@ -56,8 +56,15 @@ controller.ready(async () => {
 //   bot.reply(message, JSON.stringify(commands));
 // });
 
-controller.webserver.get("/", (req, res) => {
-  res.send(`This app is running Botkit ${controller.version}.`);
+controller.webserver.get("/", async (req, res) => {
+  await storage.setCommands();
+  const commands = await storage.getCommands();
+  const message = `
+    <h1>This app is running Botkit ${controller.version}.</h1>
+    the current commands:
+    ${JSON.stringify(commands)}
+  `;
+  res.send();
 });
 
 controller.webserver.get("/install", (req, res) => {
