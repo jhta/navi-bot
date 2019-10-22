@@ -2,7 +2,6 @@ require("dotenv").config();
 
 const { Botkit } = require("botkit");
 
-const fetchCommandsFromCms = require("./cms");
 const createSlackAdapter = require("./slack-adapter");
 const config = require("./config");
 

@@ -17,8 +17,6 @@ const httpLink = createHttpLink({
 const authLink = setContext((_, { headers }) => {
   return {
     headers: Object.assign(headers || {}, {
-      "Content-Type": "application/json",
-      Accept: "application/json",
       Authorization: `Bearer ${token}`
     })
   };
@@ -63,7 +61,10 @@ const mapCommands = commands =>
 
 const getCommandsFromCMS = async () => {
   try {
-    const result = await client.query({ query: GET_COMMANDS_QUERY });
+    const result = await client.query({
+      query: GET_COMMANDS_QUERY,
+      fetchPolicy: "no-cache"
+    });
     const data = get(result, "data.allCommands", []);
     return mapCommands(data);
   } catch (error) {
