@@ -1,12 +1,9 @@
 require("dotenv").config();
 
 const { Botkit } = require("botkit");
-
 const createSlackAdapter = require("./slack-adapter");
 const config = require("./config");
-
 const Skills = require("./skills");
-const cms = require("./skills/cms");
 
 const createStorage = require("./storage");
 // const loadRoutes = require("./routes");
@@ -20,38 +17,19 @@ const controller = new Botkit({
   debug: process.env.NODE_ENV !== "production"
 });
 
-// loadRoutes(controller);
-
 let storage = null;
 
 controller.ready(async () => {
   // load routes
   // controller.loadModules(__dirname + "/routes");
 
-  // const initCommands = await fetchCommandsFromCms();
   storage = await createStorage();
 
   Skills.hello(controller);
   Skills.help(controller, { storage });
-  cms(controller, { storage });
-});
-
-controller.hears("update_cms", "direct_message", async (bot, message) => {
-  try {
-    await storage.setCommands();
-
-    const testCommands = await storage.getCommands();
-    await bot.reply(message, "commnads updated. Check:");
-    await bot.reply(message, `${JSON.stringify(testCommands)}`);
-  } catch (error) {
-    bot.reply(message, `error reloading: ${error.message}`);
-  }
-});
-
-controller.hears("debug", "direct_message", async (bot, message) => {
-  await storage.setCommands();
-  const commands = await storage.getCommands();
-  bot.reply(message, JSON.stringify(commands));
+  Skills.cms(controller, { storage });
+  Skills.debug(controller, { storage });
+  Skills.updateCms(controller, { storage });
 });
 
 controller.webserver.get("/", async (req, res) => {
