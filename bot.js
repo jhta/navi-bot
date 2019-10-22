@@ -44,7 +44,7 @@ controller.ready(async () => {
 
   await Skills.help(controller, { storage });
   Skills.hello(controller);
-  await cms(controller, { storage });
+  // await cms(controller, { storage });
 });
 
 controller.hears("update_cms", "direct_message", async (bot, message) => {
