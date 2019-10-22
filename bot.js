@@ -9,7 +9,7 @@ const config = require("./config");
 const Skills = require("./skills");
 const cms = require("./skills/cms");
 
-// const createStorage = require("./storage");
+const createStorage = require("./storage");
 // const loadRoutes = require("./routes");
 
 const adapter = createSlackAdapter(config);
