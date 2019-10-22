@@ -1,28 +1,47 @@
 const fs = require("fs");
 const { promisify } = require("util");
 
-const readFileAsync = promisify(fs.readFile);
-const writeFileAsync = promisify(fs.writeFile);
+const low = require("lowdb");
+const FileAsync = require("lowdb/adapters/FileAsync");
 
-const readData = async () => {
-  const res = await readFileAsync(".data.json");
-  return JSON.parse(res);
-};
+const adapter = new FileAsync(".data.json");
 
-const writeData = async commands => {
-  let data = JSON.stringify(commands);
-  await writeFileAsync(".data.json", data);
-  return "done";
-};
+async function createStorage(initCommands) {
+  const db = await low(adapter);
+  await db.set("commands", initCommands).write();
 
-function Storage(initial = {}) {
-  this.commands = initial;
-  writeData(initial);
-  this.setCommands = async commands => {
-    this.commands = commands;
-    await writeData(commands);
+  const getCommands = async () => {
+    const commands = await db.get("commands").value();
+    return commands;
   };
-  this.getCommands = async () => await readData();
+
+  const setCommands = async commands => {
+    await db.set("commands", commands).write();
+    return {
+      result: "Success",
+      commands
+    };
+  };
+
+  return {
+    getCommands,
+    setCommands
+  };
 }
 
-module.exports = Storage;
+// const sleep = milliseconds => {
+//   return new Promise(resolve => setTimeout(resolve, milliseconds));
+// };
+
+// (async () => {
+//   const storage = await createStorage({ a: 1 });
+//   const commands1 = await storage.getCommands();
+//   console.log(commands1);
+
+//   await sleep(500);
+//   await storage.setCommands({ b: 3 });
+//   const commands2 = await storage.getCommands();
+//   console.log(commands2);
+// })();
+
+module.exports = createStorage;

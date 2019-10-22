@@ -9,8 +9,7 @@ const config = require("./config");
 const Skills = require("./skills");
 const cms = require("./skills/cms");
 
-const Storage = require("./storage");
-
+const createStorage = require("./storage");
 // const loadRoutes = require("./routes");
 
 const adapter = createSlackAdapter(config);
@@ -22,16 +21,16 @@ const controller = new Botkit({
   debug: process.env.NODE_ENV !== "production"
 });
 
-let storage = new Storage();
-
 // loadRoutes(controller);
+
+let storage = null;
 
 controller.ready(async () => {
   // load routes
   // controller.loadModules(__dirname + "/routes");
 
   const commands = await fetchCommandsFromCms();
-  storage.setCommands(commands);
+  storage = await createStorage(commands);
 
   await Skills.help(controller, { storage });
   Skills.hello(controller);
