@@ -33,8 +33,8 @@ controller.ready(async () => {
   storage = await createStorage();
 
   Skills.hello(controller);
-  // Skills.help(controller, { storage });
-  // cms(controller, { storage });
+  Skills.help(controller, { storage });
+  cms(controller, { storage });
 });
 
 // controller.hears("update_cms", "direct_message", async (bot, message) => {
@@ -64,7 +64,7 @@ controller.webserver.get("/", async (req, res) => {
     the current commands:
     ${JSON.stringify(commands)}
   `;
-  res.send();
+  res.send(message);
 });
 
 controller.webserver.get("/install", (req, res) => {
