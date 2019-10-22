@@ -1,12 +1,11 @@
-const fs = require("fs");
-const { promisify } = require("util");
-
 const low = require("lowdb");
 const FileAsync = require("lowdb/adapters/FileAsync");
 
+const fetchCommandsFromCms = require("./cms");
 const adapter = new FileAsync(".data.json");
 
-async function createStorage(initCommands) {
+async function createStorage() {
+  const initCommands = await fetchCommandsFromCms();
   const db = await low(adapter);
   await db.set("commands", initCommands).write();
 
@@ -15,7 +14,8 @@ async function createStorage(initCommands) {
     return commands;
   };
 
-  const setCommands = async commands => {
+  const setCommands = async () => {
+    const commands = await fetchCommandsFromCms();
     await db.set("commands", commands).write();
     return {
       result: "Success",
@@ -28,6 +28,8 @@ async function createStorage(initCommands) {
     setCommands
   };
 }
+
+// const storage = createStorage();
 
 // const sleep = milliseconds => {
 //   return new Promise(resolve => setTimeout(resolve, milliseconds));

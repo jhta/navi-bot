@@ -1,19 +1,23 @@
 const get = require("lodash/get");
 
-const createCmsMessagesMatcher = (commands = {}) => message => {
+const createCmsMessagesMatcher = async ( storage = {}) => message => {
+  const commands = await storage.getCommands();
   const msg = get(message, "text", "").toLowerCase();
   return Boolean(commands[msg]);
 };
 
 module.exports = async (controller, options) => {
   const { storage } = options;
-  const commands = await storage.getCommands();
-  const cmsMessagesMatcher = createCmsMessagesMatcher(commands);
 
   controller.hears(
-    cmsMessagesMatcher,
+    async (message) => {
+      const commands = await storage.getCommands();
+      const msg = get(message, "text", "").toLowerCase();
+      return Boolean(commands[msg]);
+    },
     "direct_message",
     async (bot, message) => {
+      const commands = await storage.getCommands();
       if (!Object.values(commands)) {
         await bot.reply(message, "there is not commands available");
         return null;

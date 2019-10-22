@@ -39,56 +39,57 @@ controller.ready(async () => {
   // load routes
   // controller.loadModules(__dirname + "/routes");
 
-  const initCommands = await fetchCommandsFromCms();
-  storage = await createStorage(initCommands);
+  // const initCommands = await fetchCommandsFromCms();
+  storage = await createStorage();
 
   await Skills.help(controller, { storage });
   Skills.hello(controller);
   await cms(controller, { storage });
+});
 
-  controller.hears("update_cms", "direct_message", async (bot, message) => {
-    try {
-      const oldCommands = await storage.getCommands();
-      const newCommands = await fetchCommandsFromCms();
-      const diff = findDiff(oldCommands, newCommands);
-      await storage.setCommands(newCommands);
-
-      const testCommands = await storage.getCommands();
-      await bot.reply(message, "commnads updated. Check:");
-      await bot.reply(message, `${JSON.stringify(newCommands)}`);
-      await bot.reply(message, `diff: ${JSON.stringify(diff)}`);
-    } catch (error) {
-      bot.reply(message, `error reloading: ${error.message}`);
-    }
-  });
-
-  controller.hears("debug", "direct_message", async (bot, message) => {
-    const commands = await storage.getCommands();
-    bot.reply(message, JSON.stringify(commands));
-  });
-
-  controller.webserver.get("/", (req, res) => {
-    res.send(`This app is running Botkit ${controller.version}.`);
-  });
-
-  controller.webserver.get("/install", (req, res) => {
-    res.redirect(controller.adapter.getInstallLink());
-  });
-
-  controller.webserver.get("/install/auth", async (req, res) => {
-    try {
-      await controller.adapter.validateOauthCode(req.query.code);
-      res.json("Success! Bot installed.");
-    } catch (err) {
-      console.error("OAUTH ERROR:", err);
-      res.status(401);
-      res.send(err.message);
-    }
-  });
-
-  controller.webserver.post("/update_cms", async (req, res) => {
-    const newCommands = await fetchCommandsFromCms();
+controller.hears("update_cms", "direct_message", async (bot, message) => {
+  try {
+    // const oldCommands = await storage.getCommands();
+    // const newCommands = await fetchCommandsFromCms();
+    // const diff = findDiff(oldCommands, newCommands);
     await storage.setCommands(newCommands);
-    res.json("storage updated :) ");
-  });
+
+    const testCommands = await storage.getCommands();
+    await bot.reply(message, "commnads updated. Check:");
+    await bot.reply(message, `${JSON.stringify(testCommands)}`);
+    // await bot.reply(message, `diff: ${JSON.stringify(diff)}`);
+  } catch (error) {
+    bot.reply(message, `error reloading: ${error.message}`);
+  }
+});
+
+controller.hears("debug", "direct_message", async (bot, message) => {
+  await storage.setCommands();
+  const commands = await storage.getCommands();
+  bot.reply(message, JSON.stringify(commands));
+});
+
+controller.webserver.get("/", (req, res) => {
+  res.send(`This app is running Botkit ${controller.version}.`);
+});
+
+controller.webserver.get("/install", (req, res) => {
+  res.redirect(controller.adapter.getInstallLink());
+});
+
+controller.webserver.get("/install/auth", async (req, res) => {
+  try {
+    await controller.adapter.validateOauthCode(req.query.code);
+    res.json("Success! Bot installed.");
+  } catch (err) {
+    console.error("OAUTH ERROR:", err);
+    res.status(401);
+    res.send(err.message);
+  }
+});
+
+controller.webserver.post("/update_cms", async (req, res) => {
+  const newCommands = await fetchCommandsFromCms();
+  await storage.setCommands(newCommands);
+  res.json("storage updated :) ");
 });
