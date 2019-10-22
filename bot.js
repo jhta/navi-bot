@@ -30,7 +30,7 @@ controller.ready(async () => {
   // controller.loadModules(__dirname + "/routes");
 
   // const initCommands = await fetchCommandsFromCms();
-  // storage = await createStorage();
+  storage = await createStorage();
 
   Skills.hello(controller);
   // Skills.help(controller, { storage });
