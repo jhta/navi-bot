@@ -1,11 +1,13 @@
 const home = require("./home");
 const install = require("./install");
 const oauth = require("./oauth");
+const updateCms = require("./update_cms");
 
-const loadRoutes = controller => {
-  home(controller);
+const loadRoutes = (controller, storage) => {
+  home(controller, storage);
   install(controller);
   oauth(controller);
+  updateCms(controller, storage);
 };
 
-export default loadRoutes;
+module.exports = loadRoutes;

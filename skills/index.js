@@ -4,12 +4,12 @@ const cms = require("./cms");
 const updateCms = require("./update-cms");
 const debug = require("./debug");
 
-const Skills = {
-  hello: hello,
-  help: help,
-  cms: cms,
-  debug: debug,
-  updateCms: updateCms
+const skills = [hello, help, cms, debug, updateCms];
+
+const loadSkills = (controller, options) => {
+  skills.forEach(skill => {
+    skill(controller, options);
+  });
 };
 
-module.exports = Skills;
+module.exports = loadSkills;
