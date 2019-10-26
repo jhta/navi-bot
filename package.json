@@ -19,6 +19,7 @@
     "botbuilder-storage-mongodb": "^0.9.5",
     "botkit": "^4.5.0",
     "botkit-plugin-cms": "^1.0.2",
+    "consola": "^2.10.1",
     "cross-fetch": "^3.0.4",
     "dotenv": "^7.0.0",
     "graphql": "^14.5.8",
