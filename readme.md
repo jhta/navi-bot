@@ -1,8 +1,23 @@
-# Botkit Starter Kit
+# Navi Slackbot
 
-This is a Botkit starter kit for slack, created with the [Yeoman generator](https://github.com/howdyai/botkit/tree/master/packages/generator-botkit#readme).
+Slackbot created with Botkit.ai NodeJS Framework and DatoCMS
 
-To complete the configuration of this bot, make sure to update the included `.env` file with your platform tokens and credentials.
+### Start server:
+`npm start`
+
+### Requirements:
+In order to run this server you need first to:
+* Create the slack application: https://api.slack.com/
+* Set slack permisions and event suscriptions.
+* You will need domain. You can use ngrok to test it locally.
+* Create a DatoCMS project (it's free!) get the API token.
+
+### How it works?
+
+<img src="/diagram.png" width="700" />
+
+
+To complete the configuration of this bot, make sure to update the included `.env` file with your platform tokens and credentials. Check `.env.example` file.
 
 [Botkit Docs](https://botkit.ai/docs/v4)
 
